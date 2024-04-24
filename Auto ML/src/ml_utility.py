@@ -34,7 +34,7 @@ def preprocess_data(df, target_column, scaler_type):
     categorical_cols = X.select_dtypes(include=['object', 'category']).columns
 
     if len(numerical_cols) == 0:
-        pass
+        raise NotImplementedError("No numerical columns found.")
     else:
         x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -51,7 +51,7 @@ def preprocess_data(df, target_column, scaler_type):
         x_test[numerical_cols] = scaler.transform(x_test[numerical_cols])
 
     if len(categorical_cols) == 0:
-        pass
+        raise NotImplementedError("No categorical columns found.")
     else:
         cat_imputer = SimpleImputer(strategy='most_frequent')
         x_train[categorical_cols] = cat_imputer.fit_transform(x_train[categorical_cols])
