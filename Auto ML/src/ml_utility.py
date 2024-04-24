@@ -36,47 +36,47 @@ def preprocess_data(df, target_column, scaler_type):
     if len(numerical_cols) == 0:
         pass
     else:
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
         num_imputer = SimpleImputer(strategy='mean')
-        X_train[numerical_cols] = num_imputer.fit_transform(X_train[numerical_cols])
-        X_test[numerical_cols] = num_imputer.transform(X_test[numerical_cols])
+        x_train[numerical_cols] = num_imputer.fit_transform(x_train[numerical_cols])
+        x_test[numerical_cols] = num_imputer.transform(x_test[numerical_cols])
 
         if scaler_type == 'standard':
             scaler = StandardScaler()
         elif scaler_type == 'minmax':
             scaler = MinMaxScaler()
 
-        X_train[numerical_cols] = scaler.fit_transform(X_train[numerical_cols])
-        X_test[numerical_cols] = scaler.transform(X_test[numerical_cols])
+        x_train[numerical_cols] = scaler.fit_transform(x_train[numerical_cols])
+        x_test[numerical_cols] = scaler.transform(x_test[numerical_cols])
 
     if len(categorical_cols) == 0:
         pass
     else:
         cat_imputer = SimpleImputer(strategy='most_frequent')
-        X_train[categorical_cols] = cat_imputer.fit_transform(X_train[categorical_cols])
-        X_test[categorical_cols] = cat_imputer.transform(X_test[categorical_cols])
+        x_train[categorical_cols] = cat_imputer.fit_transform(x_train[categorical_cols])
+        x_test[categorical_cols] = cat_imputer.transform(x_test[categorical_cols])
 
         encoder = OneHotEncoder()
-        X_train_encoded = encoder.fit_transform(X_train[categorical_cols])
-        X_test_encoded = encoder.transform(X_test[categorical_cols])
-        X_train_encoded = pd.DataFrame(X_train_encoded.toarray(), columns=encoder.get_feature_names(categorical_cols))
-        X_test_encoded = pd.DataFrame(X_test_encoded.toarray(), columns=encoder.get_feature_names(categorical_cols))
-        X_train = pd.concat([X_train.drop(columns=categorical_cols), X_train_encoded], axis=1)
-        X_test = pd.concat([X_test.drop(columns=categorical_cols), X_test_encoded], axis=1)
+        x_train_encoded = encoder.fit_transform(x_train[categorical_cols])
+        x_test_encoded = encoder.transform(x_test[categorical_cols])
+        x_train_encoded = pd.DataFrame(x_train_encoded.toarray(), columns=encoder.get_feature_names(categorical_cols))
+        x_test_encoded = pd.DataFrame(x_test_encoded.toarray(), columns=encoder.get_feature_names(categorical_cols))
+        x_train = pd.concat([x_train.drop(columns=categorical_cols), x_train_encoded], axis=1)
+        x_test = pd.concat([x_test.drop(columns=categorical_cols), x_test_encoded], axis=1)
 
-    return X_train, X_test, y_train, y_test
+    return x_train, x_test, y_train, y_test
 
 
-def train_model(X_train, y_train, model, model_name):
-    model.fit(X_train, y_train)
+def train_model(x_train, y_train, model, model_name):
+    model.fit(x_train, y_train)
     with open(f"{parent_dir}/trained_model/{model_name}.pkl", 'wb') as file:
         pickle.dump(model, file)
     return model
 
 
-def evaluate_model(model, X_test, y_test):
-    y_pred = model.predict(X_test)
+def evaluate_model(model, x_test, y_test):
+    y_pred = model.predict(x_test)
     accuracy = accuracy_score(y_test, y_pred)
     accuracy = round(accuracy, 2)
     return accuracy
