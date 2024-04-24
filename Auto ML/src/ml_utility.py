@@ -36,10 +36,10 @@ def preprocess_data(df, target_column, scaler_type):
     if len(numerical_cols) == 0:
         raise NotImplementedError("No numerical columns found.")
     else:
-        x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        x_train
+        X_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train
         num_imputer = SimpleImputer(strategy='mean')
-        x_train[numerical_cols] = num_imputer.fit_transform(x_train[numerical_cols])
+        X_train[numerical_cols] = num_imputer.fit_transform(X_train[numerical_cols])
         x_test[numerical_cols] = num_imputer.transform(x_test[numerical_cols])
 
         if scaler_type == 'standard':
@@ -47,29 +47,29 @@ def preprocess_data(df, target_column, scaler_type):
         elif scaler_type == 'minmax':
             scaler = MinMaxScaler()
 
-        x_train[numerical_cols] = scaler.fit_transform(x_train[numerical_cols])
+        X_train[numerical_cols] = scaler.fit_transform(X_train[numerical_cols])
         x_test[numerical_cols] = scaler.transform(x_test[numerical_cols])
 
     if len(categorical_cols) == 0:
         raise NotImplementedError("No categorical columns found.")
     else:
         cat_imputer = SimpleImputer(strategy='most_frequent')
-        x_train[categorical_cols] = cat_imputer.fit_transform(x_train[categorical_cols])
+        X_train[categorical_cols] = cat_imputer.fit_transform(X_train[categorical_cols])
         x_test[categorical_cols] = cat_imputer.transform(x_test[categorical_cols])
 
         encoder = OneHotEncoder()
-        x_train_encoded = encoder.fit_transform(x_train[categorical_cols])
+        X_train_encoded = encoder.fit_transform(X_train[categorical_cols])
         x_test_encoded = encoder.transform(x_test[categorical_cols])
-        x_train_encoded = pd.DataFrame(x_train_encoded.toarray(), columns=encoder.get_feature_names(categorical_cols))
+        X_train_encoded = pd.DataFrame(X_train_encoded.toarray(), columns=encoder.get_feature_names(categorical_cols))
         x_test_encoded = pd.DataFrame(x_test_encoded.toarray(), columns=encoder.get_feature_names(categorical_cols))
-        x_train = pd.concat([x_train.drop(columns=categorical_cols), x_train_encoded], axis=1)
+        X_train = pd.concat([X_train.drop(columns=categorical_cols), X_train_encoded], axis=1)
         x_test = pd.concat([x_test.drop(columns=categorical_cols), x_test_encoded], axis=1)
 
-    return x_train, x_test, y_train, y_test
+    return X_train, x_test, y_train, y_test
 
 
-def train_model(x_train, y_train, model, model_name):
-    model.fit(x_train, y_train)
+def train_model(X_train, y_train, model, model_name):
+    model.fit(X_train, y_train)
     with open(f"{parent_dir}/trained_model/{model_name}.pkl", 'wb') as file:
         pickle.dump(model, file)
     return model
