@@ -37,7 +37,7 @@ def preprocess_data(df, target_column, scaler_type):
         raise NotImplementedError("No numerical columns found.")
     else:
         x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
+        x_train
         num_imputer = SimpleImputer(strategy='mean')
         x_train[numerical_cols] = num_imputer.fit_transform(x_train[numerical_cols])
         x_test[numerical_cols] = num_imputer.transform(x_test[numerical_cols])
