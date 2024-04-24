@@ -22,6 +22,9 @@ if choice == "Upload":
         df.to_csv(SOURCE_DATA, index=None)
         st.dataframe(df)
 
+if choice == "EDA":
+    pass
+
 if choice == "Modelling":
     st.title("Machine Learning")
     target = st.selectbox("Choose your Target column", df.columns)
