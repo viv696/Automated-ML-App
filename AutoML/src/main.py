@@ -8,8 +8,6 @@ from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score
 from .ml_utility import (read_data, preprocess_data, train_model, evaluate_model)
 
-# from ml_utility import (read_data, preprocess_data, train_model, evaluate_model)
-
 working_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(working_dir)
 
