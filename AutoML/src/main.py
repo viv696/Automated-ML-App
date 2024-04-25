@@ -16,6 +16,8 @@ st.set_page_config(
     page_icon="⚙️",
     layout="centered"
 )
+if True:
+    pass
 
 st.markdown("<h1 style='text-align: center; color: #98AFC7;'>Automated Machine Learning</h1>", unsafe_allow_html=True)
 st.markdown("<h5 style='text-align: center; color: #FFFFFF;'>Build your model effortlessly - no coding or ML experience required!</h5>", unsafe_allow_html=True)
